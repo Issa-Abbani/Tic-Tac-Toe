@@ -12,36 +12,36 @@
   <link rel="icon" href="Assets/tic-tac-toe_39453.ico" type="image/x-icon" />
 </head>
 <body>
-  <div class="container">
+  <div class="marker-choice">
+    <h2 class="title">Choose your marker!</h2>
+    <div class="choice-container">
+      <div class="marker">X</div>
+      <div class="marker">O</div>
+    </div>
+  </div>
+
+  <main class="container">
     <h1 class="title">Tic Tac Toe</h1>
     
-    <div class="scoreboard">
+    <aside class="scoreboard">
       <div class="score x-score">X Wins: <span id="x-score">0</span></div>
       <div class="score ties">Ties: <span id="ties">0</span></div>
       <div class="score o-score">O Wins: <span id="o-score">0</span></div>
-    </div>
+    </aside>
 
-    <div class="game-board" id="game-board">
+    <section class="game-board" id="game-board">
       
-      <!-- <div class="cell" data-index="0"></div>
-      <div class="cell" data-index="1"></div>
-      <div class="cell" data-index="2"></div>
-      <div class="cell" data-index="3"></div>
-      <div class="cell" data-index="4"></div>
-      <div class="cell" data-index="5"></div>
-      <div class="cell" data-index="6"></div>
-      <div class="cell" data-index="7"></div>
-      <div class="cell" data-index="8"></div> -->
-    </div>
 
-    <div class="buttons">
+    </section>
+
+    <nav class="buttons">
       <button id="reset-btn">Reset Board</button>
       <button id="restart-btn">Restart Game</button>
       <button id="player-name">Select Names</button>
-    </div>
+    </nav>
 
-    <p id="status" class="status"></p>
-  </div>
+    <aside id="status" class="status"></aside>
+  </main>
 
 </body>
 </html>
