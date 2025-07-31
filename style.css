@@ -1,0 +1,139 @@
+:root {
+  --bg-color: #b8ffee;
+  --container-bg: #ccd3fe;
+  --shadow-color: rgba(0, 0, 0, 0.15);
+
+  --primary-color: #b8ffee;
+  --primary-hover: #a49fff;
+
+  --cell-bg: #e0ffff;
+  --cell-hover: #c7fef6;
+  --cell-text: #1e3a8a;
+
+  --title-color: #333333;
+  --score-color: #444444;
+  --status-color: #111827;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Bitcount Prop Single", system-ui;
+}
+
+body {
+  background: var(--bg-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.container {
+  width: 100%;
+  max-width: 400px;
+  background: var(--container-bg);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px var(--shadow-color);
+  padding: 2rem;
+  text-align: center;
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--title-color);
+}
+
+.scoreboard {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.score {
+  flex: 1;
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: var(--score-color);
+}
+
+.score:not(:last-child) {
+  margin-right: 0.5rem;
+}
+
+.game-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.cell {
+  background: var(--cell-bg);
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  font-size: 2rem;
+  color: var(--cell-text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.cell:hover {
+  background: var(--cell-hover);
+}
+
+.cell.filled {
+  pointer-events: none;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+button {
+  flex: 1;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  background: var(--primary-color);
+  color: rgb(0, 0, 0);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+  background: var(--primary-hover);
+  box-shadow: 0 4px 10px var(--primary-hover);
+}
+
+.status {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: var(--status-color);
+}
+
+/* Responsive tweaks for tablet & desktop */
+@media (min-width: 600px) {
+  .title {
+    font-size: 2.5rem;
+  }
+
+  .scoreboard {
+    font-size: 1rem;
+  }
+
+  .cell {
+    font-size: 2.5rem;
+  }
+}
+
