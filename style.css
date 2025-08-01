@@ -55,15 +55,6 @@ body:has(.marker:hover:last-child)::before {
   opacity: 0;
   background: radial-gradient(circle, var(--bg-color) 50%, rgba(255, 63, 63, 0.592) 100%);
 }
-
-body.active {
-  background: var(--bg-color);
-}
-
-main{
-  display: none;
-}
-
 .marker-choice{
   background-color: var(--container-bg);
   width: clamp(50%,60%,100%);
@@ -108,7 +99,7 @@ main{
 }
 
 
-.container {
+main {
   width: 100%;
   max-width: 400px;
   background: var(--container-bg);
@@ -197,6 +188,23 @@ button:hover {
   margin-top: 1rem;
   font-size: 1rem;
   color: var(--status-color);
+}
+
+main{
+  display: none;
+}
+
+body.active::before{
+  background: var(--bg-color);
+}
+
+.disabled{
+  display: none;
+}
+
+.enabled{
+  display: block;
+  display: flex;
 }
 
 

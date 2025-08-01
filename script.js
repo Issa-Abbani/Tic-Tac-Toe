@@ -25,4 +25,37 @@ const gridControls =(function (){
   }
 })();
 
+const gameControls = (function () {
+  let player1;
+  let board = gridControls.getBoard();
+
+  // Player object constructor
+  function Player(name, marker) {
+    this.name = name;
+    this.marker = marker;
+  }
+
+  const selectMarker = () => {
+    const markerWindow = document.querySelector('.marker-choice');
+    const markerChoices = document.querySelectorAll('.marker-choice .marker');
+    const body = document.querySelector('body');
+    const gameUI = document.querySelector('main');
+
+    markerChoices.forEach((choiceBtn) => {
+      choiceBtn.addEventListener('click', () => { 
+        body.classList.add('active');
+        markerWindow.style.display = 'none';     
+        gameUI.style.display = 'block';    
+        player1 = new Player('Player 1', choiceBtn.textContent);   
+      });
+    });
+  };
+
+  return {
+    selectMarker
+  };
+})();
+
+gameControls.selectMarker();
+
 gridControls.generateBoard();
