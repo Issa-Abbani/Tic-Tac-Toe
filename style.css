@@ -55,7 +55,7 @@ body:has(.marker:hover:last-child)::before {
   opacity: 0;
   background: radial-gradient(circle, var(--bg-color) 50%, rgba(255, 63, 63, 0.592) 100%);
 }
-.marker-choice, .enemy-choice, .bot-difficulty{
+.marker-choice, .enemy-choice{
   background-color: var(--container-bg);
   width: clamp(50%,60%,100%);
   padding: clamp(0rem,5rem,10rem);
@@ -66,7 +66,7 @@ body:has(.marker:hover:last-child)::before {
   box-shadow: 0 4px 10px var(--shadow-color);
 }
 
-.marker-choice, .enemy-choice{
+.marker-choice{
   display: none;
 }
 
@@ -103,7 +103,7 @@ body:has(.marker:hover:last-child)::before {
   box-shadow: 0 10px 5px rgba(255, 0, 0, 0.649);
 }
 
-.enemy, .dif-op {
+.enemy{
   margin-right: 3rem;
   background-color: var(--bg-color);
   padding: 2rem;
@@ -114,11 +114,6 @@ body:has(.marker:hover:last-child)::before {
   cursor: pointer;
   transition: .2s ease-in;
 }
-
-.dif-op {
-  font-size: 2.5rem;
-}
-
 
 main {
   width: 100%;
@@ -247,14 +242,6 @@ body.active::before{
   .cell {
     font-size: 2.5rem;
   }
-    .dif-op{
-    font-size: 2rem;
-    margin: 0.6rem;
-  }
-
-  .bot-difficulty{
-    min-width: 90%;
-  }
   
 }
 
@@ -269,7 +256,7 @@ body.active::before{
   border-radius: 10%;
   cursor: pointer;
   }
-  .enemy, .dif-op{
+  .enemy{
   margin: 0.5rem;
   background-color: var(--bg-color);
   padding: 1rem;
@@ -280,13 +267,5 @@ body.active::before{
   cursor: pointer;
   }
 
-  .dif-op{
-    font-size: 1rem;
-    margin: 0.2rem;
-  }
-
-  .bot-difficulty{
-    min-width: 90%;
-  }
 }
 

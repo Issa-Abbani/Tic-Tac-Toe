@@ -8,13 +8,31 @@ export const gameControls = (function () {
   let currentTurn = 'X';
   let currentPlayer;
   let ties = 0;
-
+  let enemyType;
+  let inputLocked;
   // Player object constructor
   function Player(name, marker) {
     this.name = name;
     this.marker = marker;
     this.score = 0;
   }
+
+  const selectOpponent = () =>{
+    const enemyChoices = document.querySelectorAll('.enemy-choice .enemy');
+    const enemyChoiceContainer = document.querySelector('.enemy-choice');
+    const markerWindow = document.querySelector('.marker-choice');
+
+    enemyChoices.forEach(choice =>{
+      choice.addEventListener('click', ()=>{
+        enemyType = choice.textContent; //Needed variable
+        enemyChoiceContainer.style.display = 'none';
+        markerWindow.style.display='block';
+        selectMarker();
+      });
+    });
+
+  }
+
 
   //Logic for creating player and assigning a marker to said player!
   const selectMarker = () => {
@@ -52,6 +70,7 @@ export const gameControls = (function () {
     gridControls.generateBoard();
     currentTurn = 'X';
     currentPlayer = currentTurn === player1.marker ? player1 : player2;
+
     displayScores();
     boardArray = Array(9).fill('');
     console.log(player1);
@@ -63,6 +82,7 @@ export const gameControls = (function () {
     const cells = document.querySelectorAll('.game-board .cell');
     cells.forEach(cell => {
       cell.addEventListener('click', () => {
+        if(cell.textContent !== '' || inputLocked) return;
         if (cell.textContent === '' && !gameOver) {
           const index = Number(cell.dataset.index);
           playRound(index);
@@ -83,44 +103,49 @@ export const gameControls = (function () {
 
   const playRound = (index)=>{
 
-    //Checking if board element is full or not
-    if(boardArray[index] !== ''){
-      return;
-    }
-    boardArray[index] = currentPlayer.marker;
 
-    //UI modification
-    document.querySelector(`.game-board .cell[data-index = "${index}"]`).textContent = currentPlayer.marker;
+        //Checking if board element is full or not
+      if(boardArray[index] !== ''){
+        return;
+      }
+      boardArray[index] = currentPlayer.marker;
 
-    //check if the current player has won. Done in every round.
-    if (checkWin(boardArray, currentPlayer.marker)) {
-      currentPlayer.score++;
-      console.log(player1);
-      alert(`${currentPlayer.name} wins!`);
-      saveGameData();
-      gameOver = true;
-      startGame();
-      return;
-    }
+      //UI modification
+      document.querySelector(`.game-board .cell[data-index = "${index}"]`).textContent = currentPlayer.marker;
 
-    //check if every cell is filled in order to declare a draw.
-    if (boardArray.every(cell => cell !== '')) {
-      ties++;
-      alert("It's a draw!");
-      saveGameData();
-      gameOver = true;
-      startGame();
-      return;
-    }
+      //check if the current player has won. Done in every round.
+      if (checkWin(boardArray, currentPlayer.marker)) {
+        currentPlayer.score++;
+        alert(`${currentPlayer.name} wins!`);
+        saveGameData();
+        gameOver = true;
+        inputLocked = false;
+        startGame();
+        return;
+      }
 
-    //Turn Switching via marker and then player
-    currentTurn = currentTurn === 'X' ? 'O' : 'X';
-    currentPlayer = currentTurn === player1.marker ? player1 : player2;
+      //check if every cell is filled in order to declare a draw.
+      if (boardArray.every(cell => cell !== '')) {
+          ties++;
+          alert("It's a draw!");
+          saveGameData();
+          gameOver = true;
+          inputLocked = false;
+          startGame();
+          return;
+      }
 
-    //To make the bot play in case it is it's turn
-    if (currentPlayer.name === 'Bot') {
-      setTimeout(botMove, 300);
-    }
+      //Turn Switching via marker and then player
+      currentTurn = currentTurn === 'X' ? 'O' : 'X';
+      currentPlayer = currentTurn === player1.marker ? player1 : player2;
+
+      //To make the bot play in case it is it's turn
+      if (currentPlayer.name === 'Bot') {
+        inputLocked = true
+        setTimeout(botMove, 400);
+      } else{
+        inputLocked = false;
+      }
 
   }
 
@@ -149,7 +174,8 @@ export const gameControls = (function () {
 
       const beSmart = Math.round(Math.random() * 10) / 10;
 
-      if(beSmart >= 0.3){
+
+      if(beSmart >= 0.4){
 
         //The following is a predictive algorithm that makes the bot smarter. At full power, winning is impossible
         for (const idx of emptyIndices) {
@@ -177,6 +203,9 @@ export const gameControls = (function () {
       
       const randIdx = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
       playRound(randIdx);
+      if (!gameOver) {
+      inputLocked = false;
+      };
     };
 
     //Saving data locally
@@ -222,12 +251,12 @@ export const gameControls = (function () {
       currentPlayer = currentTurn === player1.marker ? player1 : player2;
       displayScores();
       
-      const markerWindow = document.querySelector('.marker-choice');
+      const enemyChoiceContainer = document.querySelector('.enemy-choice');
       const gameUI = document.querySelector('main');
       const body = document.querySelector('body');
 
-      markerWindow.style.display = 'block';
-      markerWindow.style.textAlign = 'center';
+      enemyChoiceContainer.style.display = 'block';
+      enemyChoiceContainer.style.textAlign = 'center';
       gameUI.style.display = 'none';
       body.classList.remove('active');
 
@@ -262,7 +291,7 @@ export const gameControls = (function () {
 
 
   return {
-  selectMarker,
+  selectOpponent,
   resetPlayerData,
   resetBoardData,
   resetScoresData
