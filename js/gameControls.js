@@ -17,21 +17,30 @@ export const gameControls = (function () {
     this.score = 0;
   }
 
-  const selectOpponent = () =>{
-    const enemyChoices = document.querySelectorAll('.enemy-choice .enemy');
-    const enemyChoiceContainer = document.querySelector('.enemy-choice');
-    const markerWindow = document.querySelector('.marker-choice');
+const selectOpponent = () => {
+  const enemyChoices = document.querySelectorAll('.enemy-choice .enemy');
+  const enemyChoiceContainer = document.querySelector('.enemy-choice');
+  const markerWindow = document.querySelector('.marker-choice');
 
-    enemyChoices.forEach(choice =>{
-      choice.addEventListener('click', ()=>{
-        enemyType = choice.textContent; //Needed variable
-        enemyChoiceContainer.style.display = 'none';
-        markerWindow.style.display='block';
-        selectMarker();
-      });
-    });
-
+  const savedDataExists = loadGameData();
+  if (savedDataExists && enemyType) {
+    enemyChoiceContainer.style.display = 'none';
+    markerWindow.style.display = 'block';
+    selectMarker();
+    return;
   }
+
+  // New game flow
+  enemyChoices.forEach(choice => {
+    choice.addEventListener('click', () => {
+      enemyType = choice.textContent;
+      enemyChoiceContainer.style.display = 'none';
+      markerWindow.style.display = 'block';
+      selectMarker();
+    });
+  });
+};
+
 
 
   //Logic for creating player and assigning a marker to said player!
@@ -41,22 +50,19 @@ export const gameControls = (function () {
     const body = document.querySelector('body');
     const gameUI = document.querySelector('main');
     resetButtons();
-    if (loadGameData()) {
-    body.classList.add('active');
-    markerWindow.style.display = 'none';
-    gameUI.style.display = 'block';
-    displayScores();
-    startGame();
-    return;
-    }
-
+    
     markerChoices.forEach((choiceBtn) => {
       choiceBtn.addEventListener('click', () => { 
         body.classList.add('active');
         markerWindow.style.display = 'none';     
-        gameUI.style.display = 'block';    
+        gameUI.style.display = 'block'; 
+        if(enemyType === 'Bot!'){
+          player2 = new Player ('Bot', choiceBtn.textContent === 'X' ? 'O' : 'X');
+        } else{
+          player2 = new Player ('Player 2', choiceBtn.textContent === 'X' ? 'O' : 'X');
+        }  
         player1 = new Player('Player 1', choiceBtn.textContent);   
-        player2 = new Player ('Bot', choiceBtn.textContent === 'X' ? 'O' : 'X');
+        
         currentPlayer = currentTurn === player1.marker  ? player1 : player2;
         startGame();
         saveGameData();
@@ -215,6 +221,7 @@ export const gameControls = (function () {
         player2: { name: player2.name, score: player2.score, marker: player2.marker },
         ties: ties,
         currentTurn,
+        enemyType,
       };
       localStorage.setItem('ticTacToeGameData', JSON.stringify(data));
     };
@@ -222,7 +229,7 @@ export const gameControls = (function () {
     //load local data
     const loadGameData = () => {
       const savedData = localStorage.getItem('ticTacToeGameData');
-      if (!savedData) return false; 
+      if (!savedData) return false;
 
       const data = JSON.parse(savedData);
 
@@ -230,13 +237,18 @@ export const gameControls = (function () {
         player1 = new Player(data.player1.name, data.player1.marker);
         player1.score = data.player1.score || 0;
       }
+
       if (data.player2) {
         player2 = new Player(data.player2.name, data.player2.marker);
         player2.score = data.player2.score || 0;
       }
+
       ties = data.ties || 0;
       currentTurn = data.currentTurn || 'X';
       currentPlayer = currentTurn === player1.marker ? player1 : player2;
+
+      enemyType = data.enemyType || null;
+
 
       return true;
     };
@@ -247,6 +259,7 @@ export const gameControls = (function () {
       player1.score = 0;
       player2.score = 0;
       ties = 0;
+      enemyType = undefined;
       currentTurn = 'X';
       currentPlayer = currentTurn === player1.marker ? player1 : player2;
       displayScores();
@@ -260,7 +273,7 @@ export const gameControls = (function () {
       gameUI.style.display = 'none';
       body.classList.remove('active');
 
-      selectMarker();
+      selectOpponent();
     };
 
     //reset board data
