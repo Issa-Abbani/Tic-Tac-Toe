@@ -3,7 +3,6 @@
 A fully functional, modular JavaScript implementation of the classic Tic-Tac-Toe game.  
 Features player-vs-player and player-vs-bot (basic AI) modes, with persistent score tracking via `localStorage`.
 
-![screenshot](./assets/Tic-Tac-Toe.png) <!-- Optional: Add a real screenshot in /assets folder -->
 
 ## 🎯 Features
 
