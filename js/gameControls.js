@@ -44,7 +44,7 @@ const selectOpponent = () => {
     choice.addEventListener('click', () => {
       enemyType = choice.textContent;
       enemyChoiceContainer.style.display = 'none';
-      markerWindow.style.display = 'block';
+      markerWindow.style.display = 'flex';
       selectMarker();
     });
   });
