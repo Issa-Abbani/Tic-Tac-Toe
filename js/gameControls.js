@@ -22,7 +22,7 @@ export const gameControls = (function () {
     const markerChoices = document.querySelectorAll('.marker-choice .marker');
     const body = document.querySelector('body');
     const gameUI = document.querySelector('main');
-
+    resetButtons();
     if (loadGameData()) {
     body.classList.add('active');
     markerWindow.style.display = 'none';
@@ -185,7 +185,7 @@ export const gameControls = (function () {
         player1: { name: player1.name, score: player1.score, marker: player1.marker },
         player2: { name: player2.name, score: player2.score, marker: player2.marker },
         ties: ties,
-        currentTurn,  // save who's turn it is, optional but useful
+        currentTurn,
       };
       localStorage.setItem('ticTacToeGameData', JSON.stringify(data));
     };
@@ -212,9 +212,59 @@ export const gameControls = (function () {
       return true;
     };
 
+    //reset player data
+    const resetPlayerData = () => {
+      localStorage.removeItem('ticTacToeGameData');
+      player1.score = 0;
+      player2.score = 0;
+      ties = 0;
+      currentTurn = 'X';
+      currentPlayer = currentTurn === player1.marker ? player1 : player2;
+      displayScores();
+      
+      const markerWindow = document.querySelector('.marker-choice');
+      const gameUI = document.querySelector('main');
+      const body = document.querySelector('body');
+
+      markerWindow.style.display = 'block';
+      markerWindow.style.textAlign = 'center';
+      gameUI.style.display = 'none';
+      body.classList.remove('active');
+
+      selectMarker();
+    };
+
+    //reset board data
+    const resetBoardData = ()=>{
+      startGame();
+    }
+
+    //reset scores data
+    const resetScoresData = () =>{
+      player1.score = 0;
+      player2.score = 0;
+      ties = 0;
+      displayScores();
+      saveGameData();
+      startGame();
+    }
+
+    
+    const resetButtons = ()=>{
+      const resetBoard = document.querySelector('#reset-board');
+      const resetScores = document.querySelector('#reset-scores');
+      const resetPlayer = document.querySelector('#reset-player');
+
+      resetBoard.addEventListener('click', resetBoardData);
+      resetScores.addEventListener('click', resetScoresData);
+      resetPlayer.addEventListener('click', resetPlayerData);
+    }
+
+
   return {
   selectMarker,
-  startGame,
-  playRound
+  resetPlayerData,
+  resetBoardData,
+  resetScoresData
   };
 })();

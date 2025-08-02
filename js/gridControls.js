@@ -21,6 +21,6 @@ export const gridControls =(function (){
   return{
     getBoard,
     generateBoard,
-    clearBoard
+    clearBoard,
   }
 })();
