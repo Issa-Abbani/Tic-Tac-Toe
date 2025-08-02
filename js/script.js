@@ -1,9 +1,7 @@
-import { gridControls } from "./gridControls.js";
 import { gameControls } from "./gameControls.js";
 
+(function main() {
+  gameControls.selectMarker();
+})();
 
-gameControls.selectMarker();
 
-gridControls.generateBoard();
-
-gameControls.gridInteraction();
