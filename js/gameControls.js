@@ -23,10 +23,19 @@ const selectOpponent = () => {
   const markerWindow = document.querySelector('.marker-choice');
 
   const savedDataExists = loadGameData();
-  if (savedDataExists && enemyType) {
+  if (savedDataExists && enemyType && player1 && player2) {
     enemyChoiceContainer.style.display = 'none';
-    markerWindow.style.display = 'block';
-    selectMarker();
+    markerWindow.style.display = 'none';
+
+    const body = document.querySelector('body');
+    const gameUI = document.querySelector('main');
+
+    body.classList.add('active');
+    gameUI.style.display = 'block';
+
+    resetButtons();
+    displayScores();
+    startGame();
     return;
   }
 
@@ -50,7 +59,7 @@ const selectOpponent = () => {
     const body = document.querySelector('body');
     const gameUI = document.querySelector('main');
     resetButtons();
-    
+
     markerChoices.forEach((choiceBtn) => {
       choiceBtn.addEventListener('click', () => { 
         body.classList.add('active');
@@ -122,22 +131,31 @@ const selectOpponent = () => {
       //check if the current player has won. Done in every round.
       if (checkWin(boardArray, currentPlayer.marker)) {
         currentPlayer.score++;
-        alert(`${currentPlayer.name} wins!`);
-        saveGameData();
+        document.querySelector(`.game-board .cell[data-index = "${index}"]`).textContent = currentPlayer.marker;
         gameOver = true;
-        inputLocked = false;
-        startGame();
+        inputLocked = true;
+        saveGameData();
+
+        setTimeout(() => {
+          alert(`${currentPlayer.name} wins!`);
+          inputLocked = false;
+          startGame();
+        }, 50);
         return;
       }
 
       //check if every cell is filled in order to declare a draw.
       if (boardArray.every(cell => cell !== '')) {
           ties++;
-          alert("It's a draw!");
-          saveGameData();
+          document.querySelector(`.game-board .cell[data-index = "${index}"]`).textContent = currentPlayer.marker;
           gameOver = true;
-          inputLocked = false;
-          startGame();
+          inputLocked = true;
+          saveGameData();
+          setTimeout(() => {
+            alert("It's a draw!");
+            inputLocked = false;
+            startGame();
+          }, 50);
           return;
       }
 
