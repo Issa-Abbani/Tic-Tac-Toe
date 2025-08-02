@@ -117,7 +117,7 @@ const selectOpponent = () => {
   };
 
   const playRound = (index)=>{
-
+    const status = document.querySelector('.status');
 
         //Checking if board element is full or not
       if(boardArray[index] !== ''){
@@ -137,7 +137,7 @@ const selectOpponent = () => {
         saveGameData();
 
         setTimeout(() => {
-          alert(`${currentPlayer.name} wins!`);
+          status.textContent = `${currentPlayer.name} wins!`;
           inputLocked = false;
           startGame();
         }, 50);
@@ -152,7 +152,7 @@ const selectOpponent = () => {
           inputLocked = true;
           saveGameData();
           setTimeout(() => {
-            alert("It's a draw!");
+            status.textContent = `it's a draw!`;
             inputLocked = false;
             startGame();
           }, 50);
