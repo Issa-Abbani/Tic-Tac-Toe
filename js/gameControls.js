@@ -1,0 +1,48 @@
+import { gridControls } from "./gridControls.js";
+
+export const gameControls = (function () {
+  let player1;
+  let board = gridControls.getBoard();
+  let isPlayerTurn = true;
+
+  // Player object constructor
+  function Player(name, marker) {
+    this.name = name;
+    this.marker = marker;
+  }
+
+  //Logic for creating player and assigning a marker to said player!
+  const selectMarker = () => {
+    const markerWindow = document.querySelector('.marker-choice');
+    const markerChoices = document.querySelectorAll('.marker-choice .marker');
+    const body = document.querySelector('body');
+    const gameUI = document.querySelector('main');
+
+    markerChoices.forEach((choiceBtn) => {
+      choiceBtn.addEventListener('click', () => { 
+        body.classList.add('active');
+        markerWindow.style.display = 'none';     
+        gameUI.style.display = 'block';    
+        player1 = new Player('Player 1', choiceBtn.textContent);   
+      });
+    });
+  };
+
+  //Manipulation of DOM to allow user input
+  const gridInteraction = ()=>{
+      const cells = document.querySelectorAll('.game-board .cell');
+      cells.forEach(cell =>{
+        cell.addEventListener('click', ()=>{
+          if(cell.textContent === ''){
+            cell.textContent = player1.marker;
+          }
+        });
+      })
+  };
+
+
+  return {
+    selectMarker,
+    gridInteraction
+  };
+})();
