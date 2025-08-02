@@ -1,4 +1,4 @@
-const gridControls =(function (){
+export const gridControls =(function (){
   const board = document.querySelector(".game-board");
 
   const getBoard = () => board;
@@ -24,5 +24,3 @@ const gridControls =(function (){
     clearBoard
   }
 })();
-
-gridControls.generateBoard();
