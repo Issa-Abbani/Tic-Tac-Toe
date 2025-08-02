@@ -28,6 +28,7 @@ const gridControls =(function (){
 const gameControls = (function () {
   let player1;
   let board = gridControls.getBoard();
+  let isPlayerTurn = true;
 
   // Player object constructor
   function Player(name, marker) {
@@ -35,6 +36,7 @@ const gameControls = (function () {
     this.marker = marker;
   }
 
+  //Logic for creating player and assigning a marker to said player!
   const selectMarker = () => {
     const markerWindow = document.querySelector('.marker-choice');
     const markerChoices = document.querySelectorAll('.marker-choice .marker');
@@ -51,11 +53,26 @@ const gameControls = (function () {
     });
   };
 
+  //Manipulation of DOM to allow user input
+  const gridInteraction = ()=>{
+      const cells = document.querySelectorAll('.game-board .cell');
+      cells.forEach(cell =>{
+        cell.addEventListener('click', ()=>{
+          if(cell.textContent === ''){
+            cell.textContent = player1.marker;
+          }
+        });
+      })
+  };
+
   return {
-    selectMarker
+    selectMarker,
+    gridInteraction
   };
 })();
 
 gameControls.selectMarker();
 
 gridControls.generateBoard();
+
+gameControls.gridInteraction();
