@@ -7,11 +7,13 @@ export const gameControls = (function () {
   let boardArray = Array(9).fill('');
   let currentTurn = 'X';
   let currentPlayer;
+  let ties = 0;
 
   // Player object constructor
   function Player(name, marker) {
     this.name = name;
     this.marker = marker;
+    this.score = 0;
   }
 
   //Logic for creating player and assigning a marker to said player!
@@ -20,6 +22,15 @@ export const gameControls = (function () {
     const markerChoices = document.querySelectorAll('.marker-choice .marker');
     const body = document.querySelector('body');
     const gameUI = document.querySelector('main');
+
+    if (loadGameData()) {
+    body.classList.add('active');
+    markerWindow.style.display = 'none';
+    gameUI.style.display = 'block';
+    displayScores();
+    startGame();
+    return;
+    }
 
     markerChoices.forEach((choiceBtn) => {
       choiceBtn.addEventListener('click', () => { 
@@ -30,6 +41,7 @@ export const gameControls = (function () {
         player2 = new Player ('Bot', choiceBtn.textContent === 'X' ? 'O' : 'X');
         currentPlayer = currentTurn === player1.marker  ? player1 : player2;
         startGame();
+        saveGameData();
       });
     });
   };
@@ -40,7 +52,9 @@ export const gameControls = (function () {
     gridControls.generateBoard();
     currentTurn = 'X';
     currentPlayer = currentTurn === player1.marker ? player1 : player2;
+    displayScores();
     boardArray = Array(9).fill('');
+    console.log(player1);
 
     if(currentPlayer.name === 'Bot'){
       botMove();
@@ -57,6 +71,16 @@ export const gameControls = (function () {
     });
   };
 
+  const displayScores = ()=>{
+    const scoreboard = document.querySelector('.scoreboard');
+
+    scoreboard.innerHTML = `
+      <div class="score p1-score">${player1.name}: <span id="player1-score">${player1.score}</span></div>
+      <div class="score ties">Ties: <span id="ties">${ties}</span></div>
+      <div class="score p2-score">${player2.name}: <span id="player2-score">${player2.score}</span></div>
+    `;
+  };
+
   const playRound = (index)=>{
 
     //Checking if board element is full or not
@@ -70,16 +94,22 @@ export const gameControls = (function () {
 
     //check if the current player has won. Done in every round.
     if (checkWin(boardArray, currentPlayer.marker)) {
-      document.querySelector(`.game-board .cell[data-index = "${index}"]`).textContent = currentPlayer.marker;
+      currentPlayer.score++;
+      console.log(player1);
       alert(`${currentPlayer.name} wins!`);
+      saveGameData();
       gameOver = true;
+      startGame();
       return;
     }
 
     //check if every cell is filled in order to declare a draw.
     if (boardArray.every(cell => cell !== '')) {
+      ties++;
       alert("It's a draw!");
+      saveGameData();
       gameOver = true;
+      startGame();
       return;
     }
 
@@ -149,6 +179,38 @@ export const gameControls = (function () {
       playRound(randIdx);
     };
 
+    //Saving data locally
+    const saveGameData = () => {
+      const data = {
+        player1: { name: player1.name, score: player1.score, marker: player1.marker },
+        player2: { name: player2.name, score: player2.score, marker: player2.marker },
+        ties: ties,
+        currentTurn,  // save who's turn it is, optional but useful
+      };
+      localStorage.setItem('ticTacToeGameData', JSON.stringify(data));
+    };
+
+    //load local data
+    const loadGameData = () => {
+      const savedData = localStorage.getItem('ticTacToeGameData');
+      if (!savedData) return false; 
+
+      const data = JSON.parse(savedData);
+
+      if (data.player1) {
+        player1 = new Player(data.player1.name, data.player1.marker);
+        player1.score = data.player1.score || 0;
+      }
+      if (data.player2) {
+        player2 = new Player(data.player2.name, data.player2.marker);
+        player2.score = data.player2.score || 0;
+      }
+      ties = data.ties || 0;
+      currentTurn = data.currentTurn || 'X';
+      currentPlayer = currentTurn === player1.marker ? player1 : player2;
+
+      return true;
+    };
 
   return {
   selectMarker,
