@@ -199,7 +199,7 @@ const selectOpponent = () => {
       const beSmart = Math.round(Math.random() * 10) / 10;
 
 
-      if(beSmart >= 0.2){
+      if(beSmart >= 0.1){
 
         //The following is a predictive algorithm that makes the bot smarter. At full power, winning is impossible
         for (const idx of emptyIndices) {
